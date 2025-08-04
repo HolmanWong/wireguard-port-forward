@@ -189,12 +189,15 @@ if [[ -n "$PEERS" ]]; then
         echo "**** Please make sure the ports are properly forwarded "
         IFS=',' read -ra RULES <<< "$PORTS"
         for rule in "${RULES[@]}"; do
-            if [[ ! "$rule" =~ ^[0-9]{1,5}/(tcp|udp)$ ]]; then
+            if [[ ! "$rule" =~ ^[0-9]{1,5}/(tcp|udp):[0-9]+$ ]]; then
                 echo "Skipping invalid port rule: $rule"
                 continue
             fi
-            PORT=${rule%%/*}
-            PROTO=${rule##*/}
+            # Split into port/proto and peer
+            IFS=':' read -r portproto peer <<< "$rule"
+            PORT=${portproto%%/*}
+            PROTO=${portproto##*/}
+            PEER_NUM="$peer"
             if (( PORT < 1 || PORT > 65535 )); then
                 echo "Skipping out-of-range port: $PORT"
                 continue
@@ -203,9 +206,10 @@ if [[ -n "$PEERS" ]]; then
             RAW_RULE=${RAW_RULE//\$\{PORT\}/$PORT}
             RAW_RULE=${RAW_RULE//\$\{PROTO\}/$PROTO}
             RAW_RULE=${RAW_RULE//\$\{INTERFACE\}/$INTERFACE}
+            RAW_RULE=${RAW_RULE//\$\{PEER_NUM\}/$PEER_NUM}
             POSTUP_RULES+="$RAW_RULE"
             POSTDOWN_RULES+="${RAW_RULE//-A /-D }"
-            echo "Forwarding ${PROTO^^} port ${PORT} -> ${INTERFACE}.2:${PORT}"
+            echo "Forwarding ${PROTO^^} port ${PORT} -> ${INTERFACE}.${PEER_NUM}:${PORT}"
         done
     fi
     #########################################

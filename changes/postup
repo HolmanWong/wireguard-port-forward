@@ -1,1 +1,1 @@
-;iptables -t nat -A PREROUTING -p ${PROTO} --dport ${PORT} -j DNAT --to-destination ${INTERFACE}.2:${PORT}
+;iptables -t nat -A PREROUTING -p ${PROTO} --dport ${PORT} -j DNAT --to-destination ${INTERFACE}.${PEER_NUM}:${PORT}
