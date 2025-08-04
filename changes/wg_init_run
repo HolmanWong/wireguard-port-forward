@@ -21,7 +21,7 @@ fi
 #########################################
 # edited
 # add postup file
-if [[ ! -f /config/templates/postup ]]; then
+if ! cmp -s /defaults/postup /config/templates/postup; then
     cp /defaults/postup /config/templates/postup
 fi
 #########################################
