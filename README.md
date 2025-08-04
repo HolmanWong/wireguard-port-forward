@@ -9,7 +9,6 @@ This project is based on [linuxserver/wireguard](https://github.com/linuxserver/
 
 - **Custom Port Forwarding Support**  
   Automatically sets up `iptables` rules to forward specified TCP/UDP ports to a chosen WireGuard peer (`interface.2`).
-
 ## Usage
 
 Use this as a Docker image in your `docker-compose.yml` or manually via `docker build`:
