@@ -14,7 +14,7 @@ This project is based on [linuxserver/wireguard](https://github.com/linuxserver/
 Use this as a Docker image in your `docker-compose.yml` or manually via `docker build`:
 
 ```yaml
----
+
 services:
   wireguard:
     build: .
